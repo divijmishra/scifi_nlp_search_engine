@@ -4,6 +4,9 @@ data/
 # Literature
 literature/
 
+# some tutorial notebooks I used for practice
+notebooks/tutorials
+
 ### STANDARD Python .gitignore FROM https://github.com/github/gitignore 
 # Byte-compiled / optimized / DLL files
 __pycache__/
