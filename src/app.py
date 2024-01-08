@@ -12,6 +12,7 @@ import os
 
 
 # load data
+os.makedirs("data/final/")
 load_path = "data/final/"
 
 with open(load_path + "emotions.json") as f:
