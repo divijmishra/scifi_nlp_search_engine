@@ -10,6 +10,7 @@ dash==2.14.2
 dash-bootstrap-components==1.5.0
 Flask==2.2.5
 Flask-Compress==1.13
+gunicorn==21.2.0
 idna==3.4
 importlib-metadata==7.0.0
 itsdangerous==2.0.1
@@ -21,6 +22,7 @@ mkl-service==2.4.0
 nest-asyncio==1.5.6
 numexpr==2.8.7
 numpy==1.24.3
+packaging==23.2
 pandas==2.1.4
 pip==23.3.1
 plotly==5.9.0
