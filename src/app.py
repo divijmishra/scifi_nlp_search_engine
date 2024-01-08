@@ -86,7 +86,7 @@ def query_1(emotion, word):
 
 
 # initialize the app - incorporate a Dash Bootstrap theme
-external_stylesheets = [dbc.themes.LUX]
+external_stylesheets = [dbc.themes.LITERA]
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
@@ -139,6 +139,31 @@ app.layout = dbc.Container(
                         ),
                         html.Div(children="", id="book-information"),
                         dcc.Graph(figure={}, id="graph2"),
+                        html.Div(
+                            children="""
+                                 Each element on the y-axis is a topic, represented by
+                                 a list of representative words. The topics are derived
+                                 from BERTopic pretrained on the Wikipedia corpus, available
+                                 here.
+                                 """
+                        ),
+                        dcc.Link(
+                            children="/MaartenGr/BERTopic_Wikipedia",
+                            href="https://huggingface.co/MaartenGr/BERTopic_Wikipedia",
+                            target="here",
+                        ),
+                        dcc.Graph(figure={}, id="graph3"),
+                        html.Div(
+                            children="""
+                                 The emotions here are derived from an emotion classifier built 
+                                 on BERT, available below.
+                                 """
+                        ),
+                        dcc.Link(
+                            children="/bhadresh-savani/distilbert-base-uncased-emotion",
+                            href="https://huggingface.co/bhadresh-savani/distilbert-base-uncased-emotion",
+                            target="here",
+                        ),
                     ],
                     # width=6,
                 ),
@@ -195,7 +220,7 @@ def update_plot1(emotion, topic_word):
     return fig
 
 
-# plot 2
+# plot 2: topics
 @callback(
     Output(component_id="graph2", component_property="figure"),
     Input(component_id="book-dropdown", component_property="value"),
@@ -213,6 +238,32 @@ def update_plot2(book_name):
     fig.update_layout(yaxis={"categoryorder": "total ascending"})
     fig.update_yaxes(ticktext=df["small_topic"], tickvals=df["topic_words"])
 
+    return fig
+
+
+# plot 2: emotion
+@callback(
+    Output(component_id="graph3", component_property="figure"),
+    Input(component_id="book-dropdown", component_property="value"),
+)
+def update_plot2_emotion(book_name):
+    book_id = book_name_dict[book_name]
+    book_emotions = books[book_id]["emotion_scores"]
+    df = pd.DataFrame([book_emotions])
+
+    # normalize emotion scores to 100%
+    df = df.transpose()
+    tot = sum(df[0])
+    df[0] = df[0] * 100 / tot
+    df = df.transpose()
+
+    fig = px.bar(
+        df,
+        orientation="h",
+        labels=dict(value="Score %age", index="", variable="Emotion"),
+    )
+    fig.update_xaxes(range=[0, 100])
+    fig.update_yaxes(showticklabels=False)
     return fig
 
 
