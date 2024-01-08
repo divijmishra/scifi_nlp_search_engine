@@ -20,7 +20,7 @@ mkl-random==1.2.2
 mkl-service==2.4.0
 nest-asyncio==1.5.6
 numexpr==2.8.7
-numpy==1.26.3
+numpy==1.24.3
 pandas==2.1.4
 pip==23.3.1
 plotly==5.9.0
