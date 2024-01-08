@@ -92,7 +92,12 @@ app = Dash(__name__, external_stylesheets=external_stylesheets)
 # app layout
 app.layout = dbc.Container(
     [
-        dbc.Row([html.H1(children="The Sci-Fi book search engine!", className="header"), html.Hr()]),
+        dbc.Row(
+            [
+                html.H1(children="The Sci-Fi book search engine!", className="header"),
+                html.Hr(),
+            ]
+        ),
         dbc.Row(
             [
                 dbc.Col(
@@ -172,18 +177,18 @@ def update_plot1(emotion, topic_word):
             go.layout.Annotation(
                 x=0.5,
                 y=0.5,
-                xref='paper',
-                yref='paper',
-                text='No emotion or topic word selected.',
+                xref="paper",
+                yref="paper",
+                text="No emotion or topic word selected.",
                 showarrow=False,
-                font=dict(size=20)
+                font=dict(size=20),
             )
         )
 
         # Update layout to remove axis ticks and labels
         fig.update_layout(
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         )
 
     return fig
