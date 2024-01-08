@@ -13,14 +13,14 @@ import json
 ##### emotion detection
 
 # load book metadata dataframe
-df_metadata = pd.read_csv("../data/interim/books/books_metadata.txt", dtype="str")
+df_metadata = pd.read_csv("data/interim/books/books_metadata.txt", dtype="str")
 ids = list(df_metadata["id"])
 
 failed_ids_sa = []
 
 # directories
-load_path = "../data/interim/books/fulltexts/"
-save_path = "../data/interim/emotions/"
+load_path = "data/interim/books/fulltexts/"
+save_path = "data/interim/emotions/"
 
 # models
 nlp = spacy.load("en_core_web_sm")
@@ -87,8 +87,8 @@ for id in ids[0:]:
 failed_ids_tm = []
 
 # directories
-load_path = "../data/interim/books/fulltexts/"
-save_path = "../data/interim/topics/"
+load_path = "data/interim/books/fulltexts/"
+save_path = "data/interim/topics/"
 
 # models
 nlp = spacy.load("en_core_web_sm")
