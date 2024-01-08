@@ -95,7 +95,7 @@ app.layout = dbc.Container(
     [
         dbc.Row(
             [
-                html.H1(children="The Sci-Fi book search engine!", className="header"),
+                html.H3(children="The Sci-Fi book search engine!", className="header"),
                 html.Hr(),
             ]
         ),
@@ -103,7 +103,7 @@ app.layout = dbc.Container(
             [
                 dbc.Col(
                     [
-                        html.H3(
+                        html.H5(
                             children="""
                             Select an emotion and/or a topic word to see the most 
                             relevant books.
@@ -121,13 +121,17 @@ app.layout = dbc.Container(
                             id="topic-word-dropdown",
                             # placeholder="Start typing your word of interest."
                         ),
-                        dcc.Graph(figure={}, id="graph1"),
+                        dcc.Graph(
+                            figure={},
+                            id="graph1",
+                            style={"width": "90vh", "height": "60vh"},
+                        ),
                     ],
                     # width=6,
                 ),
                 dbc.Col(
                     [
-                        html.H3(
+                        html.H5(
                             children="""
                             Select a book to see the most significant topics in that 
                             book."""
@@ -138,32 +142,39 @@ app.layout = dbc.Container(
                             id="book-dropdown",
                         ),
                         html.Div(children="", id="book-information"),
-                        dcc.Graph(figure={}, id="graph2"),
+                        dcc.Graph(
+                            figure={},
+                            id="graph2",
+                            style={"width": "90vh", "height": "40vh"},
+                        ),
                         html.Div(
                             children="""
                                  Each element on the y-axis is a topic, represented by
                                  a list of representative words. The topics are derived
-                                 from BERTopic pretrained on the Wikipedia corpus, available
-                                 here.
+                                 from BERTopic pretrained on the Wikipedia corpus.
                                  """
                         ),
-                        dcc.Link(
-                            children="/MaartenGr/BERTopic_Wikipedia",
-                            href="https://huggingface.co/MaartenGr/BERTopic_Wikipedia",
-                            target="here",
+                        # dcc.Link(
+                        #     children="/MaartenGr/BERTopic_Wikipedia",
+                        #     href="https://huggingface.co/MaartenGr/BERTopic_Wikipedia",
+                        #     target="here",
+                        # ),
+                        dcc.Graph(
+                            figure={},
+                            id="graph3",
+                            style={"width": "90vh", "height": "35vh"},
                         ),
-                        dcc.Graph(figure={}, id="graph3"),
-                        html.Div(
-                            children="""
-                                 The emotions here are derived from an emotion classifier built 
-                                 on BERT, available below.
-                                 """
-                        ),
-                        dcc.Link(
-                            children="/bhadresh-savani/distilbert-base-uncased-emotion",
-                            href="https://huggingface.co/bhadresh-savani/distilbert-base-uncased-emotion",
-                            target="here",
-                        ),
+                        # html.Div(
+                        #     children="""
+                        #          The emotions here are derived from an emotion classifier built
+                        #          on BERT.
+                        #          """
+                        # ),
+                        # dcc.Link(
+                        #     children="/bhadresh-savani/distilbert-base-uncased-emotion",
+                        #     href="https://huggingface.co/bhadresh-savani/distilbert-base-uncased-emotion",
+                        #     target="here",
+                        # ),
                     ],
                     # width=6,
                 ),
@@ -193,7 +204,13 @@ def update_plot1(emotion, topic_word):
         df = df.sort_values(by="score", ascending=False)
         df = df.head(10)
 
-        fig = px.bar(df, x="score", y="book_name", orientation="h")
+        fig = px.bar(
+            df,
+            x="score",
+            y="book_name",
+            orientation="h",
+            title="Books most relevant to the selected emotion and topic",
+        )
         fig.update_layout(yaxis={"categoryorder": "total ascending"})
     else:
         # placeholder figure
@@ -232,11 +249,23 @@ def update_plot2(book_name):
     df = df.rename(columns={0: "score", 1: "topic_words"})
     df.sort_values(by="score")
     df = df.head(10)
-    df["small_topic"] = df["topic_words"].apply(lambda x: x[:75] + " ... ")
+    df["small_topic"] = df["topic_words"]
+    df["small_topic"] = df["small_topic"].apply(lambda x: x[:75] + " ... ")
 
-    fig = px.bar(df, x="score", y="topic_words", orientation="h")
+    fig = px.bar(
+        df,
+        x="score",
+        y="small_topic",
+        orientation="h",
+        title="Most significant topics in the selected book",
+        hover_data={
+            "score": True,
+            "topic_words": True,
+            "small_topic": False,
+        },
+    )
     fig.update_layout(yaxis={"categoryorder": "total ascending"})
-    fig.update_yaxes(ticktext=df["small_topic"], tickvals=df["topic_words"])
+    # fig.update_yaxes(ticktext=df["small_topic"], tickvals=df["topic_words"])
 
     return fig
 
@@ -261,6 +290,8 @@ def update_plot2_emotion(book_name):
         df,
         orientation="h",
         labels=dict(value="Score %age", index="", variable="Emotion"),
+        title="Emotion scores for the selected book",
+        # height=50,
     )
     fig.update_xaxes(range=[0, 100])
     fig.update_yaxes(showticklabels=False)
@@ -274,7 +305,6 @@ def update_plot2_emotion(book_name):
 )
 def update_book_info(book_name):
     book_id = book_name_dict[book_name]
-    author_name = books[book_id]["author_name"]
     output = f"""
     Author: {books[book_id]["author_name"]}  | 
     Year: {books[book_id]["year"]}    
