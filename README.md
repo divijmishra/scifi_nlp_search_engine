@@ -5,7 +5,7 @@
 Are you a sci-fi fan who can't figure out what to read next? Then the Sci-Fi Novel Search Engine is for you!
 Use the search bar to choose an emotion and a topic - the search engine will show you the most relevant books in its database. 
 
-![App screenshot](image/screenshot.png)
+![App screenshot](images/screenshot.png)
 
 This project is built on the following:
 * Dataset: The excellent [SFGram dataset](https://github.com/nschaetti/SFGram-dataset)
